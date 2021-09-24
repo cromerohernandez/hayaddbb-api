@@ -4,14 +4,19 @@
   "description": "Prueba técnica Haya: API BBDD viviendas",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon app.js",
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Carlos Romero",
   "license": "ISC",
   "dependencies": {
+    "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "http-errors": "^1.8.0",
-    "mongoose": "^6.0.7"
+    "mongoose": "^6.0.7",
+    "morgan": "^1.10.0"
   }
 }
