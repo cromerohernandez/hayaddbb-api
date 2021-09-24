@@ -9,6 +9,7 @@
   "author": "Carlos Romero",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "http-errors": "^1.8.0",
     "mongoose": "^6.0.7"
   }
