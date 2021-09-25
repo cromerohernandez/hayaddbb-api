@@ -32,6 +32,18 @@ module.exports.create = (req, res, next) => {
 }
 
 module.exports.get = (req, res, next) => {
+  House.find({})
+    .then(houses => {
+      if (!houses) {
+        throw createError(404, 'houses not found')
+      } else {
+        res.status(200).json(houses)
+      }
+    })
+    .catch(next)
+}
+
+module.exports.getDetail = (req, res, next) => {
   House.findOne({ _id: req.params.id })
     .then(house => {
       if (!house) {
