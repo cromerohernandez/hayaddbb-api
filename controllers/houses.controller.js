@@ -44,6 +44,7 @@ module.exports.get = (req, res, next) => {
 }
 
 module.exports.getDetail = (req, res, next) => {
+
   House.findOne({ _id: req.params.id })
     .then(house => {
       if (!house) {
