@@ -2,6 +2,8 @@ const createError = require('http-errors')
 
 const House = require('../models/house.model')
 
+const { setCriteria, setSearch, setSort } = require('../helpers/controllers.helper')
+
 module.exports.create = (req, res, next) => {
   const { address, area, description, features, price } = req.body
 
@@ -31,13 +33,46 @@ module.exports.create = (req, res, next) => {
     .catch(next)
 }
 
-module.exports.get = (req, res, next) => {
-  House.find({})
+module.exports.getBasics = (req, res, next) => {
+  const criteria = setCriteria(req.query)
+  const criteriaAndSearch = setSearch('house', criteria)
+  const sort = setSort(req.query)
+  const firstIndex = parseInt(req.query.firstIndex)
+  const itemsPerPage = parseInt(req.query.itemsPerPage)
+  let totalNumber = null
+
+  House.find(criteriaAndSearch)
+    /*.count((err, count) => {
+      if (err) {
+        totalNumber = null
+      } else {
+        totalNumber = count
+      }
+    })*/
+    .sort(sort)
+    .skip(firstIndex - 1)
+    .limit(itemsPerPage)
     .then(houses => {
       if (!houses) {
         throw createError(404, 'houses not found')
       } else {
-        res.status(200).json(houses)
+        const housesBasic = houses.map(house => {
+          const houseBasic = {
+            id: house.id,
+            address_city: house.address_city,
+            area: house.area,
+            description: house.description,
+            price: house.price,
+          }
+          return houseBasic
+        })
+
+        const housesResponse = {
+          housesBasic: housesBasic,
+          firstIndex: firstIndex,
+          totalNumber: totalNumber
+        }
+        res.status(200).json(housesResponse)
       }
     })
     .catch(next)
@@ -56,7 +91,7 @@ module.exports.getDetail = (req, res, next) => {
     .catch(next)
 }
 
-module.exports.update = (req, res, next) => {  
+module.exports.update = (req, res, next) => {
   House.findOne({ _id: req.params.id })
     .then(house => {
       if (!house) {
