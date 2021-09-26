@@ -1,6 +1,11 @@
 const mongoose = require('mongoose')
 
 const houseSchema = new mongoose.Schema({
+  ref: {
+    type: String,
+    required: [true, 'ref is required'],
+    unique: true
+  },
   address_city: {
     type: String,
     required: [true, 'city is required'],
@@ -9,6 +14,9 @@ const houseSchema = new mongoose.Schema({
     type: String,
   },
   address_floor: {
+    type: String,
+  },
+  address_rest: {
     type: String,
   },
   address_street_type: {
@@ -35,6 +43,9 @@ const houseSchema = new mongoose.Schema({
   },
   description: {
     type: String
+  },
+  garage: {
+    type: Boolean
   },
   garden: {
     type: Boolean
