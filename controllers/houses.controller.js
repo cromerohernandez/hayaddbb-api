@@ -39,20 +39,13 @@ module.exports.getBasics = (req, res, next) => {
   const sort = setSort(req.query)
   const firstIndex = parseInt(req.query.firstIndex)
   const itemsPerPage = parseInt(req.query.itemsPerPage)
-  let totalNumber = null
 
-  House.find(criteriaAndSearch)
-    /*.count((err, count) => {
-      if (err) {
-        totalNumber = null
-      } else {
-        totalNumber = count
-      }
-    })*/
-    .sort(sort)
-    .skip(firstIndex - 1)
-    .limit(itemsPerPage)
-    .then(houses => {
+  Promise.all([
+    House.find(criteriaAndSearch).countDocuments(),
+    House.find(criteriaAndSearch).sort(sort).skip(firstIndex - 1).limit(itemsPerPage)
+  ])
+    .then(data => {
+      const houses = data[1]
       if (!houses) {
         throw createError(404, 'houses not found')
       } else {
@@ -70,7 +63,7 @@ module.exports.getBasics = (req, res, next) => {
         const housesResponse = {
           housesBasic: housesBasic,
           firstIndex: firstIndex,
-          totalNumber: totalNumber
+          totalNumber: data[0]
         }
         res.status(200).json(housesResponse)
       }
@@ -79,7 +72,6 @@ module.exports.getBasics = (req, res, next) => {
 }
 
 module.exports.getDetail = (req, res, next) => {
-
   House.findOne({ _id: req.params.id })
     .then(house => {
       if (!house) {
