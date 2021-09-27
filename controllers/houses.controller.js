@@ -5,27 +5,46 @@ const House = require('../models/house.model')
 const { setCriteria, setSearch, setSort } = require('../helpers/controllers.helper')
 
 module.exports.create = (req, res, next) => {
-  const { address, area, description, features, price } = req.body
+  const { 
+          address_city,
+          address_door,
+          address_floor,
+          address_postcode,
+          address_rest,
+          address_street_type,
+          address_street_name,
+          address_street_number,
+          area,
+          bathrooms,
+          bedrooms,
+          description,
+          garage,
+          garden,
+          terrace,
+          type,
+          price,
+          ref
+        } = req.body
 
   const house = new House({
-    address: {
-      city: address.city,
-      door: address.door,
-      floor: address.floor,
-      street_type: address.street_type,
-      street_name: address.street_name,
-      street_number: address.street_number,
-    },
+    address_city: address_city,
+    address_door: address_door,
+    address_floor: address_floor,
+    address_postcode: address_postcode,
+    address_rest: address_rest,
+    address_street_type: address_street_type,
+    address_street_name: address_street_name,
+    address_street_number: address_street_number,
     area: area,
+    bathrooms: bathrooms,
+    bedrooms: bedrooms,
     description: description,
-    features: {
-      bathrooms: features.bathrooms,
-      bedrooms: features.bedrooms,
-      garden: features.garden,
-      terrace: features.terrace,
-      type: features.type,
-    },
+    garage: garage,
+    garden: garden,
+    terrace: terrace,
+    type: type,
     price: price,
+    ref: ref
   })
 
   house.save()
@@ -96,11 +115,30 @@ module.exports.update = (req, res, next) => {
       if (!house) {
         throw createError(404, 'house not found')
       } else {
-        ['address', 'area', 'description', 'features', 'price'].forEach(key => {
-          if (req.body[key]) {
+        [ 
+          'address_city',
+          'address_door',
+          'address_floor',
+          'address_postcode',
+          'address_rest',
+          'address_street_type',
+          'address_street_name',
+          'address_street_number',
+          'area',
+          'bathrooms',
+          'bedrooms',
+          'description',
+          'garage',
+          'garden',
+          'terrace',
+          'type',
+          'price'
+        ].forEach(key => {
+          if (req.body[key] || typeof(req.body[key]) === 'boolean') {
             house[key] = req.body[key]
           }
         })
+
         house.save()
           .then(updatedHouse => {
             res.status(200).json(updatedHouse)
