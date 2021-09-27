@@ -52,9 +52,16 @@ module.exports.getBasics = (req, res, next) => {
         const housesBasic = houses.map(house => {
           const houseBasic = {
             id: house.id,
+            ref: house.ref,
+            address_door: house.address_door,
+            address_floor: house.address_floor,
+            address_postcode: house.address_postcode,
+            address_rest: house.address_rest,
+            address_street_type: house.address_street_type,
+            address_street_name: house.address_street_name,
+            address_street_number: house.address_street_number,
             address_city: house.address_city,
             area: house.area,
-            description: house.description,
             price: house.price,
           }
           return houseBasic

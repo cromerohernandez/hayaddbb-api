@@ -16,6 +16,10 @@ const houseSchema = new mongoose.Schema({
   address_floor: {
     type: String,
   },
+  address_postcode: {
+    type: String,
+    required: [true, 'postcode is required'],
+  },
   address_rest: {
     type: String,
   },
