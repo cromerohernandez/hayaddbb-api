@@ -1,6 +1,15 @@
 const queryFields = {
   house: {
-    string: ['ref', 'address', 'address_postcode', 'address_city'],
+    string: [
+      'ref',
+      'address_street_type',
+      'address_street_name',
+      'address_street_number',
+      'address_floor',
+      'address_door',
+      'address_postcode',
+      'address_city'
+    ],
     number: [],
     range: ['area', 'price']
   }
@@ -17,7 +26,7 @@ function setCriteria (query) {
 //remove empty fields from criteria array and set format of criteria array fields.
 function setSearch (model, criteria) {
   queryFields[model].string.forEach(criterion => {
-    if(criteria[criterion]) {
+    if (criteria[criterion]) {
       criteria = {...criteria, [criterion]: { $regex: criteria[criterion], $options: 'i' }}
     } else {
       delete criteria[criterion]
@@ -25,11 +34,11 @@ function setSearch (model, criteria) {
   })
 
   queryFields[model].range.forEach(criterion => {
-    if(criteria[criterion + '_min'] && criteria[criterion + '_max']) {
+    if (criteria[criterion + '_min'] && criteria[criterion + '_max']) {
       criteria = {...criteria, [criterion]: { $gte: criteria[criterion + '_min'], $lte: criteria[criterion + '_max'] }}
-    } else if(criteria[criterion + '_min']) {
+    } else if (criteria[criterion + '_min']) {
       criteria = {...criteria, [criterion]: { $gte: criteria[criterion + '_min'] }}
-    } else if(criteria[criterion + '_max']) {
+    } else if (criteria[criterion + '_max']) {
       criteria = {...criteria, [criterion]: { $lte: criteria[criterion + '_max'] }}
     } else {
       delete criteria[criterion]
