@@ -8,10 +8,15 @@ const queryFields = {
       'address_floor',
       'address_door',
       'address_postcode',
-      'address_city'
+      'address_city',
+      'type'
     ],
-    number: [],
-    range: ['area', 'price']
+    boolean: [
+      'garage',
+      'garden',
+      'terrace'
+    ],
+    range: ['area', 'bathrooms', 'bedrooms', 'price']
   }
 }
 
@@ -28,6 +33,16 @@ function setSearch (model, criteria) {
   queryFields[model].string.forEach(criterion => {
     if (criteria[criterion]) {
       criteria = {...criteria, [criterion]: { $regex: criteria[criterion], $options: 'i' }}
+    } else {
+      delete criteria[criterion]
+    }
+  })
+
+  queryFields[model].boolean.forEach(criterion => {
+    if (criteria[criterion] === 'true') {
+      criteria = {...criteria, [criterion]: true}
+    } else if (criteria[criterion] === 'false') {
+      criteria = {...criteria, [criterion]: false}
     } else {
       delete criteria[criterion]
     }
