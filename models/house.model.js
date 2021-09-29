@@ -56,6 +56,10 @@ const houseSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  price: {
+    type: Number,
+    required: [true, 'price is required'],
+  },
   terrace: {
     type: Boolean,
     default: false
@@ -64,10 +68,6 @@ const houseSchema = new mongoose.Schema({
     type: String,
     required: [true, 'type is required'],
     enum: ['Ático', 'Bajo', 'Casa', 'Chalet independiente', 'Chalet adosado', 'Piso']
-  },
-  price: {
-    type: Number,
-    required: [true, 'price is required'],
   }
 },
 { timestamps: true,
